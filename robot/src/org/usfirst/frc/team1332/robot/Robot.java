@@ -20,7 +20,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team1332.robot.commands.ExampleCommand;
 import org.usfirst.frc.team1332.robot.subsystems.ExampleSubsystem;
-
+import org.usfirst.frc.team1332.robot.subsystems.Pickup;
+import org.usfirst.frc.team1332.robot.subsystems.shooter;
+import org.usfirst.frc.team1332.robot.subsystems.lift;
 import com.ctre.CANTalon;
 
 /**
@@ -34,7 +36,9 @@ public class Robot extends IterativeRobot {
 
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
+	public static Robot robot;
 	RobotDrive robotDrive;
+	//
 	ADXRS450_Gyro gyro;
 	PowerDistributionPanel pdp;
 	BuiltInAccelerometer bia;
@@ -44,22 +48,35 @@ public class Robot extends IterativeRobot {
 
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
-
+	
+	public shooter shooter;
+	 
+	public  lift lift;
+	
+	public  Pickup pickup;
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
+	
+		robot = this;
+		shooter = new shooter();
+		 
+		 lift = new lift();
+		
+		pickup = new Pickup();
 		oi = new OI();
+		
 		chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
 		
-		robotDrive = new RobotDrive(RobotMap.talonFL, RobotMap.talonRL, RobotMap.talonFR, RobotMap.talonRR);
-		robotDrive.setInvertedMotor(MotorType.kRearLeft, true);
-		robotDrive.setInvertedMotor(MotorType.kRearRight, true);
-		robotDrive.setMaxOutput(0.5);
+		//robotDrive = new RobotDrive(RobotMap.talonFL, RobotMap.talonRL, RobotMap.talonFR, RobotMap.talonRR);
+		//robotDrive.setInvertedMotor(MotorType.kRearLeft, true);
+		//robotDrive.setInvertedMotor(MotorType.kRearRight, true);
+		//robotDrive.setMaxOutput(0.5);
 		gyro = new ADXRS450_Gyro();
 		gyro.calibrate();
 		pdp = new PowerDistributionPanel(1);
@@ -166,9 +183,9 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Heading", gyro.getAngle());
 		
 		//RobotMap.talonRL.set(0.5);
-		double yAxis = oi.stick.getY();
-		double xAxis = oi.stick.getX();
-		double zAxis = oi.stick.getZ();
+		double yAxis = oi.opPad.getY();
+		double xAxis = oi.opPad.getX();
+		double zAxis = oi.opPad.getZ();
 		
 		double resultFL = (yAxis + -1 * xAxis + -1 * zAxis)/3;
 		double resultFR = (yAxis + xAxis + zAxis)/3;
@@ -176,12 +193,16 @@ public class Robot extends IterativeRobot {
 		double resultRR = (yAxis + -1 * xAxis + zAxis)/3;
 		
 		
-		
+		try {
 		RobotMap.talonFL.set(resultFL);
 		RobotMap.talonFR.set((-1 * resultFR));
 		RobotMap.talonRL.set((-1 * resultRL));
 		RobotMap.talonRR.set(resultRR);
-
+		}
+		catch(Exception ex)
+		{
+			System.out.println(ex.getMessage());
+		}
 		
 
 	}
@@ -193,4 +214,9 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 		LiveWindow.run();
 	}
+	
+	public static Robot getinstance (){
+		return robot;
+	}
+	
 }

@@ -2,6 +2,11 @@ package org.usfirst.frc.team1332.robot;
 
 import org.usfirst.frc.team1332.robot.commands.ExampleCommand;
 import org.usfirst.frc.team1332.robot.commands.RobotServo;
+import org.usfirst.frc.team1332.robot.commands.feedBall;
+import org.usfirst.frc.team1332.robot.commands.liftRobot;
+import org.usfirst.frc.team1332.robot.commands.lowerRobot;
+import org.usfirst.frc.team1332.robot.commands.pickupBall;
+import org.usfirst.frc.team1332.robot.commands.shootBall;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -14,6 +19,15 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
+	public JoystickButton shootBallB1;
+	public JoystickButton feedBallB2;
+	public JoystickButton liftRobotB3;
+	public JoystickButton lowerRobotB4;
+	public JoystickButton pickupBallB5;
+	
+	public Joystick opPad;
+	public Joystick arcadeStick;
+	
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
 	//// joystick.
@@ -45,7 +59,6 @@ public class OI {
 	Joystick stick;
 	
 	public OI(){
-		
 	stick = new Joystick(1);
 	JoystickButton button = new JoystickButton(stick,1);	
 	
@@ -55,4 +68,25 @@ public class OI {
 	public Joystick getStick(){
 		return stick;
 	}
+	{
+	opPad = new Joystick (2);
+	shootBallB1 = new JoystickButton (opPad,6);
+	shootBallB1.whileHeld(new shootBall());
+	feedBallB2 = new JoystickButton (opPad,5);
+	feedBallB2.whileHeld(new feedBall());
+	
+	liftRobotB3 = new JoystickButton (opPad,4);
+	liftRobotB3.whileHeld(new liftRobot());
+	
+	lowerRobotB4 = new JoystickButton (opPad,1);
+	lowerRobotB4.whileHeld(new lowerRobot());
+	
+	pickupBallB5 = new JoystickButton (opPad,3);
+	pickupBallB5.whileHeld(new pickupBall());
+	
+	
+	
+	
+	}
+	
 	}

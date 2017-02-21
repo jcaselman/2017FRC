@@ -2,6 +2,7 @@ package org.usfirst.frc.team1332.robot;
 
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.TalonSRX;
+import edu.wpi.first.wpilibj.Victor;
 
 import com.ctre.CANTalon;
 
@@ -41,5 +42,11 @@ public class RobotMap {
 	public static CANSpeedController talonRL = new CANTalon(canTalonRL);
 	public static CANSpeedController talonRR = new CANTalon(canTalonRR);
 	
+	public static Victor shootervictor1 = new Victor(0);
+	public static Victor shootervictor2 =new Victor(1);
+	public static Victor feedervictor3 =new Victor(2);
 	
+	public static Victor liftvictor =new Victor(3);
+	
+	public static Victor pickupvictor=new Victor(4);
 }
