@@ -12,7 +12,7 @@ public class liftRobot extends Command {
     public liftRobot() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.getinstance().lift);
+    	requires(Robot.lift);
     }
 
     // Called just before this Command runs the first time
@@ -22,7 +22,7 @@ public class liftRobot extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.getinstance().lift.liftRobot();
+    	Robot.lift.liftRobot();
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -32,7 +32,7 @@ public class liftRobot extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.getinstance().lift.stopMotor();
+    	Robot.lift.stopMotor();
     }
 
     // Called when another command which requires one or more of the same

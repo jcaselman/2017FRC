@@ -6,24 +6,15 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.RobotDrive.MotorType;
-import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team1332.robot.commands.ExampleCommand;
-import org.usfirst.frc.team1332.robot.subsystems.ExampleSubsystem;
-import org.usfirst.frc.team1332.robot.subsystems.Pickup;
-import org.usfirst.frc.team1332.robot.subsystems.shooter;
-import org.usfirst.frc.team1332.robot.subsystems.lift;
-import com.ctre.CANTalon;
+import org.usfirst.frc.team1332.robot.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -34,49 +25,35 @@ import com.ctre.CANTalon;
  */
 public class Robot extends IterativeRobot {
 
-	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+    public static final shooter shooter = new shooter();
+    public static final lift lift = new lift();
+    public static final Pickup pickup = new Pickup();
+	
 	public static OI oi;
-	public static Robot robot;
-	RobotDrive robotDrive;
-	//
+	public static Robot robot;	
+
 	ADXRS450_Gyro gyro;
 	PowerDistributionPanel pdp;
 	BuiltInAccelerometer bia;
 	Preferences pref;
 	UsbCamera camera;
 	
-
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
 	
-	public shooter shooter;
-	 
-	public  lift lift;
-	
-	public  Pickup pickup;
+
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
-	public void robotInit() {
-	
+	public void robotInit() {	
 		robot = this;
-		shooter = new shooter();
-		 
-		 lift = new lift();
-		
-		pickup = new Pickup();
 		oi = new OI();
-		
-		chooser.addDefault("Default Auto", new ExampleCommand());
+
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
 		
-		//robotDrive = new RobotDrive(RobotMap.talonFL, RobotMap.talonRL, RobotMap.talonFR, RobotMap.talonRR);
-		//robotDrive.setInvertedMotor(MotorType.kRearLeft, true);
-		//robotDrive.setInvertedMotor(MotorType.kRearRight, true);
-		//robotDrive.setMaxOutput(0.5);
 		gyro = new ADXRS450_Gyro();
 		gyro.calibrate();
 		pdp = new PowerDistributionPanel(1);
@@ -174,15 +151,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		//robotDrive.arcadeDrive(oi.stick);
-		
-		//robotDrive.mecanumDrive_Cartesian(oi.stick.getY(), oi.stick.getX(), oi.stick.getZ(),/*gyro.getAngle()*/0 );
-		
-
-		
+	
 		SmartDashboard.putNumber("Heading", gyro.getAngle());
-		
-		//RobotMap.talonRL.set(0.5);
+
 		double yAxis = oi.opPad.getY();
 		double xAxis = oi.opPad.getX();
 		double zAxis = oi.opPad.getZ();
@@ -191,19 +162,11 @@ public class Robot extends IterativeRobot {
 		double resultFR = (yAxis + xAxis + zAxis)/3;
 		double resultRL = (yAxis + xAxis + -1 * zAxis)/3;
 		double resultRR = (yAxis + -1 * xAxis + zAxis)/3;
-		
-		
-		try {
+
 		RobotMap.talonFL.set(resultFL);
 		RobotMap.talonFR.set((-1 * resultFR));
 		RobotMap.talonRL.set((-1 * resultRL));
 		RobotMap.talonRR.set(resultRR);
-		}
-		catch(Exception ex)
-		{
-			System.out.println(ex.getMessage());
-		}
-		
 
 	}
 
@@ -214,9 +177,5 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 		LiveWindow.run();
 	}
-	
-	public static Robot getinstance (){
-		return robot;
-	}
-	
+
 }
